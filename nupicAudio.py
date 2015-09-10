@@ -115,11 +115,11 @@ class AudioStream:
     
     """
     The number of columns in the input and therefore the TP
-     2**9 = 512
+     2**9 = 512, changed it to 2**11
      Trial and error pulled that out
      numCols should be tested during benchmarking
     """
-    self.numCols = 2**9
+    self.numCols = 2**11
     sparsity = 0.10
     self.numInput = int(self.numCols * sparsity)
 
@@ -128,9 +128,9 @@ class AudioStream:
     
     From the encoder's __init__ method:
      1st arg: the total bits in input
-     2nd arg: the number of bits used to encode each input bit
+     2nd arg: the number of bits used to encode each input bit// it was 1 changed it to 5
     """
-    self.e = SparsePassThroughEncoder(self.numCols, 1)
+    self.e = SparsePassThroughEncoder(self.numCols, 5)
 
     """
     Sampling details
@@ -162,9 +162,9 @@ class AudioStream:
     self.lowpass = min(int(lowHertz * self.buffersize / rate), self.buffersize/2 - 1)
 
     """
-    The call to create the temporal pooler region
+    The call to create the temporal pooler region, Changed here it had 4 cells, changed it to 32.
     """
-    self.tp = TP(numberOfCols=self.numCols, cellsPerColumn=4,
+    self.tp = TP(numberOfCols=self.numCols, cellsPerColumn=32,
       initialPerm=0.5, connectedPerm=0.5,
       minThreshold=10, newSynapseCount=10,
       permanenceInc=0.1, permanenceDec=0.07,
